@@ -38,17 +38,18 @@
     },
     {
       "boot_command": [
-        "<esc><wait>",
-        "install",
-        " auto",
-        " url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `preseed` }}",
-        " debian-installer=en_US",
-        " locale=en_US",
-        " keymap=us",
-        " netcfg/get_hostname=vagrant",
-        " netcfg/get_domain=vm ",
-        "<enter>"
+	"<enter><wait10><wait10>",
+	"<enter><wait5><left><enter>",
+	"<wait10><wait10><wait10><enter>",
+	"<wait5><enter>",
+	"<wait10><wait10><wait10><wait10><wait10>",
+	"{{user `ssh_password`}}<enter>",
+	"{{user `ssh_password`}}<enter>",
+	"<tab><right><enter>",
+	"<tab><right><enter>",
+	"<wait5><right><enter><wait10>"
       ],
+      "boot_wait": "5s",
       "disk_size": "{{ user `disk_size` }}",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
@@ -61,7 +62,7 @@
         "{{ user `iso_url` }}"
       ],
       "output_directory": "output-{{ user `vm_name` }}-virtualbox-iso",
-      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -h now",
+      "shutdown_command": "shutdown -h now",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_wait_timeout": "10000s",
@@ -134,16 +135,34 @@
         "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
         "SSH_PASSWORD={{user `ssh_password`}}",
+        "DEBIAN_FRONTEND=noninteractive",
         "http_proxy={{user `http_proxy`}}",
         "https_proxy={{user `https_proxy`}}",
         "ftp_proxy={{user `ftp_proxy`}}",
         "rsync_proxy={{user `rsync_proxy`}}",
         "no_proxy={{user `no_proxy`}}"
       ],
-      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "script/remove-cdrom-sources.sh",
-        "script/update.sh",
+        "script/update.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "CM={{user `cm`}}",
+        "CM_VERSION={{user `cm_version`}}",
+        "UPDATE={{user `update`}}",
+        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+        "SSH_USERNAME={{user `ssh_username`}}",
+        "SSH_PASSWORD={{user `ssh_password`}}",
+        "DEBIAN_FRONTEND=noninteractive",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "rsync_proxy={{user `rsync_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "scripts": [
         "script/vagrant.sh",
         "script/vmware.sh",
         "script/virtualbox.sh",
@@ -154,6 +173,7 @@
         "script/minimize.sh",
         "script/cleanup.sh"
       ],
+      "pause_before": "2m",
       "type": "shell"
     }
   ],
@@ -161,28 +181,28 @@
     "cm": "nocm",
     "cm_version": "",
     "cpus": "1",
-    "disk_size": "65536",
+    "disk_size": "10240",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "headless": "",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
-    "iso_checksum": "40f51a36b39c180fe46d7393e5a3a3985072ffc2",
+    "iso_checksum": "4a5a2128bf5435dc598c0345da1eda82182bfca2",
     "iso_checksum_type": "sha1",
-    "iso_name": "debian-8.2.0-amd64-DVD-1.iso",
-    "iso_path": "/Volumes/Thunder/software/debian",
-    "iso_url": "http://cdimage.debian.org/cdimage/release/8.2.0/amd64/iso-dvd/debian-8.2.0-amd64-DVD-1.iso",
+    "iso_name": "turnkey-core-14.1-jessie-amd64.iso",
+    "iso_path": "{{env `iso_path`}}",
+    "iso_url": "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-core-14.1-jessie-amd64.iso",
     "memory": "512",
     "no_proxy": "{{env `no_proxy`}}",
     "parallels_guest_os_type": "debian",
     "preseed": "preseed-jessie.cfg",
     "rsync_proxy": "{{env `rsync_proxy`}}",
-    "ssh_password": "vagrant",
-    "ssh_username": "vagrant",
-    "update": "false",
+    "ssh_password": "Vagrant1",
+    "ssh_username": "root",
+    "update": "true",
     "version": "0.1.0",
     "virtualbox_guest_os_type": "Debian_64",
-    "vm_name": "debian82",
+    "vm_name": "tkl141-core",
     "vmware_guest_os_type": "debian8-64"
   }
 }

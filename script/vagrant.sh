@@ -15,6 +15,8 @@ if ! id -u $SSH_USER >/dev/null 2>&1; then
 fi
 
 # Set up sudo.  Be careful to set permission BEFORE copying file to sudoers.d
+echo '===> Setting up sudo'
+apt-get install -y sudo
 ( cat <<EOP
 %$SSH_USER ALL=(ALL) NOPASSWD:ALL
 EOP

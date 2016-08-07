@@ -44,13 +44,6 @@ let count--
 dd if=/dev/zero of=/tmp/whitespace bs=1024 count=$count
 rm /tmp/whitespace
 
-# Whiteout /boot
-echo '==> Clear out /boot'
-count=$(df --sync -kP /boot | tail -n1 | awk -F ' ' '{print $4}')
-let count--
-dd if=/dev/zero of=/boot/whitespace bs=1024 count=$count
-rm /boot/whitespace
-
 echo '==> Clear out swap and disable until reboot'
 set +e
 swapuuid=$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)

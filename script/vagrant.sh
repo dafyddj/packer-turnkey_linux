@@ -10,7 +10,7 @@ VAGRANT_INSECURE_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrt
 if ! id -u $SSH_USER >/dev/null 2>&1; then
     echo '==> Creating Vagrant user'
     /usr/sbin/groupadd $SSH_USER
-    /usr/sbin/useradd $SSH_USER -g $SSH_USER -G sudo -d $SSH_USER_HOME --create-home
+    /usr/sbin/useradd $SSH_USER -g $SSH_USER -G sudo -d $SSH_USER_HOME --create-home -s /bin/bash
     echo "${SSH_USER}:${SSH_USER}" | chpasswd
 fi
 
@@ -23,6 +23,7 @@ EOP
 ) > /tmp/vagrant
 chmod 0440 /tmp/vagrant
 mv /tmp/vagrant /etc/sudoers.d/
+sed --in-place=.sed '/Defaults\s\+env_reset/a Defaults\texempt_group=sudo' /etc/sudoers
 
 # Packer passes boolean user variables through as '1', but this might change in
 # the future, so also check for 'true'.

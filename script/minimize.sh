@@ -32,9 +32,6 @@ if ! [[ ${CM} == 'puppet' ]]; then
   apt-get -y purge ruby ri
 fi
 
-echo "==> Removing default system Python"
-apt-get -y purge python-dbus python-smartpm python-twisted-core libiw30 python-twisted-bin libdbus-glib-1-2 python-pexpect python-pycurl python-serial python-gobject python-pam python-openssl
-
 # Clean up the apt cache
 echo "==> Cleaning up the apt cache"
 apt-get -y autoremove --purge

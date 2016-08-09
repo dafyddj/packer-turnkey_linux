@@ -23,6 +23,8 @@ echo "==> Removing X11 libraries"
 apt-get -y purge libx11-data xauth libxmuu1 libxcb1 libx11-6 libxext6
 echo "==> Removing obsolete networking components"
 apt-get -y purge ppp pppconfig pppoeconf
+echo "==> Removing Webmin modules"
+dpkg --list | awk '{ print $2 }' | grep -- '^webmin' | xargs apt-get -y purge
 echo "==> Removing other oddities"
 apt-get -y purge popularity-contest installation-report wireless-tools wpasupplicant
 

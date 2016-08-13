@@ -202,7 +202,7 @@
     "update": "true",
     "version": "0.1.0",
     "virtualbox_guest_os_type": "Debian_64",
-    "vm_name": "tkl141-core",
+    "vm_name": "tkl141",
     "vmware_guest_os_type": "debian8-64"
   }
 }

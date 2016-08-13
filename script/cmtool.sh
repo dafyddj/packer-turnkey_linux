@@ -57,7 +57,7 @@ install_salt()
     echo "==> Installing Salt"
     if [[ ${CM_VERSION:-} == 'latest' ]]; then
         echo "Installing latest Salt version"
-        wget -O - http://bootstrap.saltstack.org | sudo sh
+        curl -LSs http://bootstrap.saltstack.org | sh
     else
         echo "Installing Salt version $CM_VERSION"
         curl -L http://bootstrap.saltstack.org | sudo sh -s -- git $CM_VERSION

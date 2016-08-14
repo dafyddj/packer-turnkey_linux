@@ -26,13 +26,7 @@ apt-get -y purge ppp pppconfig pppoeconf
 echo "==> Removing Webmin modules"
 dpkg --list | awk '{ print $2 }' | grep -- '^webmin' | xargs apt-get -y purge
 echo "==> Removing other oddities"
-apt-get -y purge popularity-contest installation-report wireless-tools wpasupplicant
-
-# Only remove ruby if not required by the CM
-if ! [[ ${CM} == 'puppet' ]]; then
-  echo "==> Removing default system Ruby"
-  apt-get -y purge ruby ri
-fi
+apt-get -y purge popularity-contest installation-report wireless-tools wpasupplicant shellinabox confconsole
 
 # Clean up the apt cache
 echo "==> Cleaning up the apt cache"

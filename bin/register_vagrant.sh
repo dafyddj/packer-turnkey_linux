@@ -146,9 +146,9 @@ create_metadata() {
 }
 
 publish_provider() {
-    OUT=$(mktemp /tmp/output.XXXXXXXXXX) || { echo "Failed to create temp file"; exit 1; }
-    echo $METADATA_JSON > $OUT
-    vagrant box add $OUT && rm $OUT  
+    METADATA_FILE=box/${BOX_NAME}${BOX_SUFFIX%-*}.json
+    echo $METADATA_JSON > $METADATA_FILE
+    vagrant box add $METADATA_FILE
 }
 
 

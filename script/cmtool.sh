@@ -55,13 +55,13 @@ install_chef_dk()
 install_salt()
 {
     echo "==> Installing Salt"
-    BOOTSTRAP_OPTS="-p python-augeas"
+    BOOTSTRAP_OPTS="-p python-augeas -p python-git"
     if [[ ${CM_VERSION:-} == 'latest' ]]; then
         echo "Installing latest Salt version"
-        curl -LSs http://bootstrap.saltstack.org | sh -s -- "$BOOTSTRAP_OPTS"
+        curl -LSs http://bootstrap.saltstack.org | sh -s -- $BOOTSTRAP_OPTS
     else
         echo "Installing Salt version $CM_VERSION"
-        curl -LSs http://bootstrap.saltstack.org | sh -s -- git $CM_VERSION "$BOOTSTRAP_OPTS"
+        curl -LSs http://bootstrap.saltstack.org | sh -s -- $BOOTSTRAP_OPTS stable $CM_VERSION 
     fi
 }
 

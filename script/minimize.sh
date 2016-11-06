@@ -34,16 +34,16 @@ apt-get -y autoremove --purge
 apt-get -y autoclean
 apt-get -y clean
 
-echo "==> Removing man pages"
-find /usr/share/man -type f -delete
+#echo "==> Removing man pages"
+#find /usr/share/man -type f -delete
 echo "==> Removing APT files"
 find /var/lib/apt -type f -delete
 echo "==> Removing any docs"
 find /usr/share/doc -type f -delete
 echo "==> Removing caches"
 find /var/cache -type f -delete
-echo "==> Removing groff info lintian linda"
-rm -rf /usr/share/groff/* /usr/share/info/* /usr/share/lintian/* /usr/share/linda/*
+#echo "==> Removing groff info lintian linda"
+#rm -rf /usr/share/groff/* /usr/share/info/* /usr/share/lintian/* /usr/share/linda/*
 
 echo "==> Disk usage after cleanup"
 df -h

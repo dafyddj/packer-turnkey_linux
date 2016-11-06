@@ -1,6 +1,7 @@
 {
   "_comment": "Build with `packer build -var-file=tkl141-core.json tkl.json`",
   "cm": "salt",
+  "cm_version": "2015.8",
   "headless": "true",
   "vm_name": "tkl141-core"
 }

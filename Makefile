@@ -7,7 +7,7 @@ ifndef CM_VERSION
 		CM_VERSION = latest
 	endif
 endif
-BOX_VERSION ?= $(shell cat VERSION)
+BOX_VERSION ?= $(shell bin/version)
 ifeq ($(CM),nocm)
 	BOX_SUFFIX := -$(CM)-$(BOX_VERSION).box
 else

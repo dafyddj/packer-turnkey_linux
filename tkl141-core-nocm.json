@@ -1,5 +1,0 @@
-{
-  "_comment": "Build with `packer build -var-file=tkl141-core-nocm.json tkl.json`",
-  "headless": "true",
-  "vm_name": "tkl141-core"
-}

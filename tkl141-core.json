@@ -1,7 +1,0 @@
-{
-  "_comment": "Build with `packer build -var-file=tkl141-core.json tkl.json`",
-  "cm": "salt",
-  "cm_version": "latest",
-  "headless": "true",
-  "vm_name": "tkl141-core"
-}

@@ -38,18 +38,19 @@
     },
     {
       "boot_command": [
-        "<enter><wait10><wait10>",
-        "<enter><wait5><left><enter>",
-        "<wait5><enter><enter>",
+        "<enter><wait20s>",
+        "<enter><wait1><left><enter>",
+        "<wait1><enter>",
+        "<wait1><enter>",
         "<wait5><left><enter>",
-        "<wait10><wait10><wait10><enter>",
+        "<wait20s><enter>",
         "<wait5><enter>",
-        "<wait10><wait10><wait10><wait10><wait10>",
+        "<wait40s>",
         "{{user `ssh_password`}}<enter>",
         "{{user `ssh_password`}}<enter>",
         "<tab><right><enter>",
         "<tab><right><enter>",
-        "<wait5><right><enter><wait10>"
+        "<wait1><right><enter><wait2s>"
       ],
       "boot_wait": "5s",
       "disk_size": "{{ user `disk_size` }}",

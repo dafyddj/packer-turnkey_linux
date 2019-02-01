@@ -39,12 +39,12 @@
     {
       "boot_command": [
         "<enter><wait20s>",
-        "<enter><wait1><left><enter>",
-        "<wait1><enter>",
-        "<wait1><enter>",
-        "<wait5><left><enter>",
+        "<enter><wait2s><left><enter>",
+        "<wait2s><enter>",
+        "<wait2s><enter>",
+        "<wait10><left><enter>",
         "<wait20s><enter>",
-        "<wait5><enter>",
+        "<wait10><enter>",
         "<wait40s>",
         "{{user `ssh_password`}}<enter>",
         "{{user `ssh_password`}}<enter>",

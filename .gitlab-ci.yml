@@ -1,3 +1,6 @@
+before_script:
+  - packer --version
+
 build:
   script:
-    - packer --version
+    - packer build -only=virtualbox-iso -var-file=tkl150-core.json -var "version=$(version)" tkl.json

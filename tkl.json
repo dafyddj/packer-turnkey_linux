@@ -123,11 +123,18 @@
     }
   ],
   "post-processors": [
-    {
-      "keep_input_artifact": false,
-      "output": "box/{{.Provider}}/{{ user `vm_name` }}-{{ user `version` }}.box",
-      "type": "vagrant"
-    }
+    [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": false,
+        "output": "box/{{.Provider}}/{{ user `vm_name` }}-{{ user `version` }}.box"
+      },
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "techneg/tklcore-15",
+        "version": "{{ user `version` }}"
+      }
+    ]
   ],
   "provisioners": [
     {

@@ -131,6 +131,7 @@
       },
       {
         "type": "vagrant-cloud",
+        "name": "upload",
         "box_tag": "techneg/tklcore-15",
         "version": "{{ user `version` }}"
       }

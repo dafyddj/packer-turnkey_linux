@@ -1,6 +1,27 @@
+stages:
+  - validate
+  - build
+
 before_script:
+  - export VER_DATE=$(date +%Y.%-m) && echo $VER_DATE
   - packer --version
 
-build:
+variables:
+  PACKER_ARGS: -only=virtualbox-iso -var-file=tkl150-core.json tkl.json
+
+validate:
+  stage: validate
+  image:
+    name: hashicorp/packer
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   script:
-    - packer build -only=virtualbox-iso -var-file=tkl150-core.json -var "version=$(version)" tkl.json
+    - packer validate -except=upload $PACKER_ARGS
+
+build:
+  stage: build
+  tags:
+    - virtualbox
+  script:
+    - packer build -except=upload -var "version=$VER_DATE.$CI_PIPELINE_IID" $PACKER_ARGS

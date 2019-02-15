@@ -17,8 +17,8 @@
       "guest_os_type": "{{ user `vmware_guest_os_type` }}",
       "headless": "{{ user `headless` }}",
       "http_directory": "http",
-      "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
       "iso_urls": [
         "{{ user `iso_path` }}/{{ user `iso_name` }}",
         "{{ user `iso_url` }}"
@@ -46,8 +46,8 @@
         "<wait30s><enter>",
         "<wait10><enter>",
         "<wait60s>",
-        "{{user `ssh_password`}}<enter>",
-        "{{user `ssh_password`}}<enter>",
+        "{{ user `ssh_password` }}<enter>",
+        "{{ user `ssh_password` }}<enter>",
         "<tab><right><enter>",
         "<tab><right><enter>",
         "<wait2s><right><enter><wait2s>"
@@ -132,18 +132,18 @@
   "provisioners": [
     {
       "environment_vars": [
-        "DESKTOP={{user `desktop`}}",
-        "REMOVE_DOCS={{user `remove_docs`}}",
-        "UPDATE={{user `update`}}",
-        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
-        "SSH_USERNAME={{user `ssh_username`}}",
-        "SSH_PASSWORD={{user `ssh_password`}}",
+        "DESKTOP={{ user `desktop` }}",
+        "REMOVE_DOCS={{ user `remove_docs` }}",
+        "UPDATE={{ user `update` }}",
+        "INSTALL_VAGRANT_KEY={{ user `install_vagrant_key` }}",
+        "SSH_USERNAME={{ user `ssh_username` }}",
+        "SSH_PASSWORD={{ user `ssh_password` }}",
         "DEBIAN_FRONTEND=noninteractive",
-        "http_proxy={{user `http_proxy`}}",
-        "https_proxy={{user `https_proxy`}}",
-        "ftp_proxy={{user `ftp_proxy`}}",
-        "rsync_proxy={{user `rsync_proxy`}}",
-        "no_proxy={{user `no_proxy`}}"
+        "http_proxy={{ user `http_proxy` }}",
+        "https_proxy={{ user `https_proxy` }}",
+        "ftp_proxy={{ user `ftp_proxy` }}",
+        "rsync_proxy={{ user `rsync_proxy` }}",
+        "no_proxy={{ user `no_proxy` }}"
       ],
       "scripts": [
         "script/systemd.sh",

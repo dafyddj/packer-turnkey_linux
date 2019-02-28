@@ -13,3 +13,5 @@ builds/
 
 .DS_Store
 .tmpatlas/
+.kitchen/
+.kitchen.local.yml

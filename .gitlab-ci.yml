@@ -6,6 +6,10 @@ stages:
 before_script:
   - export VER_DATE=$(date +%Y.%-m) && echo $VER_DATE
   - packer --version
+  - VBoxManage --version
+  - vagrant --version
+  - kitchen --version
+  - bundle install
 
 variables:
   PACKER_ARGS: -only=virtualbox-iso -var-file=tkl150-core.json tkl.json
@@ -17,6 +21,8 @@ validate:
     entrypoint:
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - packer --version
   script:
     - packer validate -except=upload $PACKER_ARGS
 

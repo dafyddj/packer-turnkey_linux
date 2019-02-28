@@ -130,6 +130,20 @@
         "output": "box/{{.Provider}}/{{ user `vm_name` }}-{{ user `version` }}.box"
       },
       {
+        "type": "manifest",
+	"output": "box/manifest.json"
+      },
+      {
+        "inline": [
+          "export PACKER_VAGRANT_BOX=$(jq -r \".builds[].packer_run_uuid\" box/manifest.json)",
+          "export PACKER_VAGRANT_BOX_URL=file://$(pwd)/$(jq -r \".builds[].files[].name\" box/manifest.json)",
+          "echo Testing $PACKER_VAGRANT_BOX $PACKER_VAGRANT_BOX_URL",
+          "kitchen test",
+          "vagrant box remove -f $PACKER_VAGRANT_BOX"
+        ],
+        "type": "shell-local"
+      },
+      {
         "type": "vagrant-cloud",
         "name": "publish",
         "box_tag": "techneg/tklcore-15",

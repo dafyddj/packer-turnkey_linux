@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.8 (2016-12-04)
+
+* Upgrade Parallels Tools to 12.1.1
+* Upgrade VirtualBox guest additions to 5.1.10
+## 2.0.7 (2016-09-28)
+
+* Change naming scheme dropping point releases from names
+* Upgrade VMware tools to 10.0.10 for VMware Fusion 8.5.0
+* Upgrade to Parallels 12 and Parallels Tools 12.0.2
+
+## 2.0.6 (2016-08-28)
+
+* Add Debian 8.5 template
+* Add Debian 8.5 desktop template
+* Add Debian 7.11 template
+* Upgrade VirtualBox guest additions to 5.0.26
+* Upgrade VMware tools to 10.0.6
+* Upgrade Parallels tools to 11.2.1
+
 ## 2.0.5 (2016-01-11)
 
 * Upgrade Parallels tools to 11.1.2

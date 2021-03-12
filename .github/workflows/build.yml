@@ -1,0 +1,12 @@
+name: Packer Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  packer-build:
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - name: Packer Build
+        run: packer build -only=virtualbox-iso -var-file=tkl150-core.json -var "version=2021.3.23" -except=publish,manifest,shell-local tkl.json

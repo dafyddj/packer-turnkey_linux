@@ -9,6 +9,9 @@ tmp
 *.swp
 Makefile.local
 box/
+builds/
 
 .DS_Store
 .tmpatlas/
+.kitchen/
+.kitchen.local.yml

@@ -1,3 +1,8 @@
+variable "disable_breakpoint" {
+  type    = bool
+  default = true
+}
+
 variable "headless" {
   type    = string
   default = "true"
@@ -31,7 +36,7 @@ source "virtualbox-vm" "guestadd" {
   ssh_timeout             = "10000s"
   ssh_username            = var.ssh_username
   target_snapshot         = "guestadded"
-  virtualbox_version_file = ""
+  virtualbox_version_file = ".vbox_version"
   vm_name                 = source.name
 }
 

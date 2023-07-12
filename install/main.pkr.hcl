@@ -40,4 +40,8 @@ build {
   source "virtualbox-vm.install" {
     name    = "tkl142"
   }
+
+  source "virtualbox-vm.install" {
+    name    = "tkl15"
+  }
 }

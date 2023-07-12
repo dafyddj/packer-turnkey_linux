@@ -142,3 +142,14 @@ build {
     ]
     name          = "tkl142"
   }
+
+  source "virtualbox-iso.boot" {
+    guest_os_type = "Debian_64"
+    iso_checksum  = "7c2d654313e934df8a03772680c34cbbc03d93ec6a208961e5f0b85b1c2f68f1"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-15.0-stretch-amd64.iso",
+      "${var.iso_dir}/turnkey-core-15.0-stretch-amd64.iso",
+      var.iso_url
+    ]
+    name          = "tkl15"
+  }

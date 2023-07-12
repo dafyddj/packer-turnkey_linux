@@ -1,0 +1,144 @@
+
+variable "cpus" {
+  type    = string
+  default = "1"
+}
+
+variable "desktop" {
+  type    = string
+  default = "false"
+}
+
+variable "disable_breakpoint" {
+  type    = bool
+  default = true
+}
+
+variable "disk_size" {
+  type    = string
+  default = "10240"
+}
+
+variable "ftp_proxy" {
+  type    = string
+  default = "${env("ftp_proxy")}"
+}
+
+variable "headless" {
+  type    = string
+  default = "false"
+}
+
+variable "http_proxy" {
+  type    = string
+  default = "${env("http_proxy")}"
+}
+
+variable "https_proxy" {
+  type    = string
+  default = "${env("https_proxy")}"
+}
+
+variable "install_vagrant_key" {
+  type    = string
+  default = "true"
+}
+
+variable "iso_dir" {
+  type    = string
+  default = "../iso"
+}
+
+variable "iso_url" {
+  type    = string
+  default = "https://example.com/win.iso"
+}
+
+variable "memory" {
+  type    = string
+  default = "512"
+}
+
+variable "no_proxy" {
+  type    = string
+  default = "${env("no_proxy")}"
+}
+
+variable "output_dir" {
+  type    = string
+  default = "../vms"
+}
+
+variable "preseed" {
+  type    = string
+  default = "preseed-jessie.cfg"
+}
+
+variable "root_dir" {
+  type    = string
+  default = ".."
+}
+
+variable "rsync_proxy" {
+  type    = string
+  default = "${env("rsync_proxy")}"
+}
+
+variable "shutdown_command" {
+  type    = string
+  default = "shutdown -h now"
+}
+
+variable "ssh_password" {
+  type    = string
+  default = "Vagrant1"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "root"
+}
+
+variable "update" {
+  type    = string
+  default = "true"
+}
+
+variable "version" {
+  type    = string
+  default = "0.1.0"
+}
+
+source "virtualbox-iso" "boot" {
+  boot_command            = ["<enter><wait40s>", "<enter><wait4s><left><enter>", "<wait4s><enter>", "<wait4s><enter>", "<wait20><left><enter>", "<wait60s><enter>", "<wait20><enter>", "<wait70s>", "${var.ssh_password}<enter><wait2s>", "${var.ssh_password}<enter><wait2s>", "<tab><right><enter><wait2s>", "<tab><right><enter>", "<wait4s><right><enter><wait4s>"]
+  boot_wait               = "5s"
+  cpus         = var.cpus
+  disk_size    = var.disk_size
+  guest_additions_mode     = "disable"
+  headless                 = var.headless
+  hard_drive_discard       = true
+  hard_drive_nonrotational = true
+  keep_registered          = true
+  memory                   = var.memory
+  output_directory         = var.output_dir
+  shutdown_command         = var.shutdown_command
+  skip_export              = true
+  ssh_password            = var.ssh_password
+  ssh_timeout             = "10000s"
+  ssh_username            = var.ssh_username
+  virtualbox_version_file  = ""
+  vm_name                  = source.name
+}
+
+build {
+  name = "boot"
+  source "virtualbox-iso.boot" {
+    guest_os_type = "Debian_64"
+    iso_checksum  = "171bb1c9fdba78830e7c5c0d084cf4b448ae564b041fff592f46a9306d51dbf7"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-14.2-jessie-amd64.iso",
+      "${var.iso_dir}/turnkey-core-14.2-jessie-amd64.iso",
+      var.iso_url
+    ]
+    name          = "tkl142"
+  }

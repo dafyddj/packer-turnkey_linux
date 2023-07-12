@@ -1,0 +1,43 @@
+variable "headless" {
+  type    = string
+  default = "true"
+}
+
+variable "shutdown_command" {
+  type    = string
+  default = "shutdown -h now"
+}
+
+variable "ssh_password" {
+  type    = string
+  default = "Vagrant1"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "root"
+}
+
+source "virtualbox-vm" "guestadd" {
+  attach_snapshot         = "installed"
+  boot_wait               = "-1s"
+  force_delete_snapshot   = true
+  guest_additions_mode    = "attach"
+  headless                = var.headless
+  keep_registered         = true
+  shutdown_command        = var.shutdown_command
+  skip_export             = true
+  ssh_password            = var.ssh_password
+  ssh_timeout             = "10000s"
+  ssh_username            = var.ssh_username
+  target_snapshot         = "guestadded"
+  virtualbox_version_file = ""
+  vm_name                 = source.name
+}
+
+build {
+  name = "guestadd"
+
+  source "virtualbox-vm.guestadd" {
+    name    = "tkl142"
+  }

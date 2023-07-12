@@ -11,6 +11,8 @@ Makefile.local
 box/
 builds/
 
+*.cat.pkr.hcl
+
 .DS_Store
 .tmpatlas/
 .kitchen/

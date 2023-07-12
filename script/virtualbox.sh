@@ -2,7 +2,7 @@
 
 if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
     echo "==> Installing VirtualBox guest additions"
-    apt-get update
+#    apt-get update
     apt-get install -y linux-headers-$(uname -r) build-essential perl
     apt-get install -y dkms
 

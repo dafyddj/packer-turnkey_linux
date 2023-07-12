@@ -158,8 +158,8 @@ build {
     guest_os_type = "Debian_64"
     iso_checksum  = "44e79c72781aa2483047552bce7e354838145406409d4a5a5175c8e13ab703ae"
     iso_urls      = [
-      "${var.root_dir}/iso/turnkey-core-16.0-buster-amd64.iso",
-      "${var.iso_dir}/turnkey-core-16.0-buster-amd64.iso",
+      "${var.root_dir}/iso/turnkey-core-16.1-buster-amd64.iso",
+      "${var.iso_dir}/turnkey-core-16.1-buster-amd64.iso",
       var.iso_url
     ]
     name          = "tkl16"

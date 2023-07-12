@@ -49,3 +49,7 @@ build {
   source "virtualbox-vm.guestadd" {
     name    = "tkl15"
   }
+
+  source "virtualbox-vm.guestadd" {
+    name    = "tkl16"
+  }

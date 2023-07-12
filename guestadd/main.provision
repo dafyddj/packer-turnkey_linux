@@ -7,3 +7,7 @@
 #    pause_before      = "10s"
     script           = "script/virtualbox.sh"
   }
+
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }

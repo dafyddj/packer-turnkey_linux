@@ -27,7 +27,7 @@ source "virtualbox-vm" "guestadd" {
   attach_snapshot         = "installed"
   boot_wait               = "-1s"
   force_delete_snapshot   = true
-  guest_additions_mode    = "attach"
+  guest_additions_path    = "VBoxGuestAdditions.iso"
   headless                = var.headless
   keep_registered         = true
   shutdown_command        = var.shutdown_command
@@ -36,7 +36,6 @@ source "virtualbox-vm" "guestadd" {
   ssh_timeout             = "10000s"
   ssh_username            = var.ssh_username
   target_snapshot         = "guestadded"
-  virtualbox_version_file = ".vbox_version"
   vm_name                 = source.name
 }
 

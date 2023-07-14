@@ -11,6 +11,7 @@ Makefile.local
 box/
 builds/
 
+*.snapshot
 *.cat.pkr.hcl
 
 .DS_Store

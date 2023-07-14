@@ -3,8 +3,17 @@
   }
 
   provisioner "shell" {
-#    expect_disconnect = "true"
-#    pause_before      = "10s"
+    inline = [<<-EOF
+      apt-get update
+      apt-get install -y linux-image-amd64
+      reboot
+      EOF
+    ]
+    expect_disconnect = "true"
+    pause_after = "20s"
+  }
+
+  provisioner "shell" {
     script           = "script/virtualbox.sh"
   }
 

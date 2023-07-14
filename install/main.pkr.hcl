@@ -1,6 +1,6 @@
 variable "headless" {
-  type    = string
-  default = "true"
+  type    = bool
+  default = true
 }
 
 variable "shutdown_command" {

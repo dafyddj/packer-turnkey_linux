@@ -1,20 +1,11 @@
-packer_cache/
-output-*
-*.box
-*.tar.gz
-iso
-crash.log
-tmp
+/box/
+/vms/
+
+/iso
+
 .vagrant/
-*.swp
-Makefile.local
-box/
-builds/
+output-*/
+packer_cache/
 
 *.snapshot
 *.cat.pkr.hcl
-
-.DS_Store
-.tmpatlas/
-.kitchen/
-.kitchen.local.yml

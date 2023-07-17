@@ -1,0 +1,18 @@
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }
+
+  provisioner "shell" {
+    inline = [<<-EOF
+      apt-get update
+      apt-get install -y linux-image-amd64
+      reboot
+      EOF
+    ]
+    expect_disconnect = "true"
+    pause_after = "30s"
+  }
+
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }

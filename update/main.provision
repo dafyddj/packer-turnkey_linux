@@ -1,0 +1,15 @@
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }
+
+  provisioner "shell" {
+    inline = [<<-EOF
+      apt-get update
+      DEBIAN_FRONTEND=noninteractive apt-get --assume-yes upgrade
+      EOF
+    ]
+  }
+
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }

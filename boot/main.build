@@ -194,7 +194,8 @@ build {
     iso_urls      = [
       "${var.root_dir}/iso/turnkey-core-16.1-buster-amd64.iso",
       "${var.iso_dir}/turnkey-core-16.1-buster-amd64.iso",
-      var.iso_url
+      var.iso_url,
+      "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-core-16.1-buster-amd64.iso"
     ]
     name          = "tkl16"
   }

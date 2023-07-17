@@ -1,12 +1,45 @@
-name: Packer Build
-
-on:
-  workflow_dispatch:
-
+name: Build boxes
+on: [push, pull_request, workflow_dispatch]
 jobs:
-  packer-build:
-    runs-on: macos-10.15
+  run-packer:
+    runs-on: macos-12
+    env:
+      MAKE_VARS: --dry-run
+      PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [tkl16]
     steps:
-      - uses: actions/checkout@v2
-      - name: Packer Build
-        run: packer build -only=virtualbox-iso -var-file=tkl150-core.json -var "version=2021.3.23" -except=publish,manifest,shell-local tkl.json
+      - name: Prepare environment
+        run: |
+          brew install make
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set to not dry-run
+        if: github.event_name != 'push'
+        run: |
+          echo "MAKE_VARS=" >> $GITHUB_ENV
+      - name: Packer boot
+        run: |
+          gmake ${{ env.MAKE_VARS }} boot-${{ matrix.version }}
+      - name: Packer install
+        run: |
+          gmake ${{ env.MAKE_VARS }} install-${{ matrix.version }}
+      - name: Packer update
+        run: |
+          gmake ${{ env.MAKE_VARS }} update-${{ matrix.version }}
+#      - name: Packer provision
+#        run: |
+#          gmake ${{ env.MAKE_VARS }} provision-${{ matrix.version }}
+      - name: Packer export
+        run: |
+          gmake ${{ env.MAKE_VARS }} export-${{ matrix.version }}
+      - name: Packer upload
+        if: github.ref_name == 'main'
+        env:
+          PKR_VAR_no_release: false
+        run: |
+          cd upload
+          gmake ${{ env.MAKE_VARS }} ${{ matrix.version }}

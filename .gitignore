@@ -9,3 +9,5 @@ packer_cache/
 
 *.snapshot
 *.cat.pkr.hcl
+
+serial.box

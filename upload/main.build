@@ -1,0 +1,45 @@
+variable "box_dir" {
+  type    = string
+  default = "../box/virtualbox"
+}
+
+variable "cm" {
+  type    = string
+  default = "nocm"
+}
+
+variable "cm_version" {
+  type    = string
+  default = ""
+}
+
+variable "no_release" {
+  type    = bool
+  default = true
+}
+
+variable "prefix" {
+  type    = string
+  default = "test-"
+}
+
+variable "version" {
+  type    = string
+  default = "0.0.1pre"
+}
+
+source "null" "upload" {
+  communicator = "none"
+}
+
+build {
+  name = "upload"
+
+  source "null.upload" {
+    name    = "tkl16"
+  }
+
+#  source "null.upload" {
+#    name    = "tkl17"
+#  }
+ 

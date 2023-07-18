@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "${DEBUG:-false}" = "true" ]; then
+  set -x # Run the entire script in debug mode
+fi
+
+serial="serial.box"
+if [ ! -e "$serial" ] ; then
+  cur=1
+else
+  read cur <$serial
+fi
+
+next=$((cur + 1))
+echo $next >$serial
+
+cur=${GITHUB_RUN_NUMBER:-$cur}
+
+VERSION="$(date +%Y.%-m).$cur"
+
+echo $VERSION

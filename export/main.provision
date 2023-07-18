@@ -1,0 +1,4 @@
+  post-processor "vagrant" {
+    output               = "${var.box_dir}/${source.name}.box"
+    vagrantfile_template = ""
+  }

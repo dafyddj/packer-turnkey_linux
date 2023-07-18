@@ -1,0 +1,201 @@
+
+variable "cpus" {
+  type    = string
+  default = "1"
+}
+
+variable "desktop" {
+  type    = string
+  default = "false"
+}
+
+variable "disable_breakpoint" {
+  type    = bool
+  default = true
+}
+
+variable "disk_size" {
+  type    = string
+  default = "10240"
+}
+
+variable "ftp_proxy" {
+  type    = string
+  default = "${env("ftp_proxy")}"
+}
+
+variable "headless" {
+  type    = bool
+  default = true
+}
+
+variable "http_proxy" {
+  type    = string
+  default = "${env("http_proxy")}"
+}
+
+variable "https_proxy" {
+  type    = string
+  default = "${env("https_proxy")}"
+}
+
+variable "install_vagrant_key" {
+  type    = string
+  default = "true"
+}
+
+variable "iso_dir" {
+  type    = string
+  default = "../iso"
+}
+
+variable "iso_url" {
+  type    = string
+  default = "https://example.com/tkl.iso"
+}
+
+variable "memory" {
+  type    = string
+  default = "512"
+}
+
+variable "no_proxy" {
+  type    = string
+  default = "${env("no_proxy")}"
+}
+
+variable "output_dir" {
+  type    = string
+  default = "../vms"
+}
+
+variable "preseed" {
+  type    = string
+  default = "preseed-jessie.cfg"
+}
+
+variable "root_dir" {
+  type    = string
+  default = ".."
+}
+
+variable "rsync_proxy" {
+  type    = string
+  default = "${env("rsync_proxy")}"
+}
+
+variable "shutdown_command" {
+  type    = string
+  default = "shutdown -h now"
+}
+
+variable "ssh_password" {
+  type    = string
+  default = "Vagrant1"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "root"
+}
+
+variable "update" {
+  type    = string
+  default = "true"
+}
+
+variable "version" {
+  type    = string
+  default = "0.1.0"
+}
+
+locals {
+  boot_tkl14_15 = [
+    "<enter><wait40s>",                      // Skip installer boot screen
+    "<enter><wait4s><left><enter>",          // Guided partitioning with LVM, and write to disk
+    "<wait4s><enter>",                       // Ok; partition info page
+    "<wait4s><enter>",                       // Choose "90%"
+    "<wait20><left><enter>",                 // Yes; write changes to disk
+    "<wait60s><enter>",                      // Copying data to disk; Yes; Install GRUB
+    "<wait20><enter>",                       // Yes; restart
+    "<wait70s>",                             // Installation proceeds
+    "${var.ssh_password}<enter><wait2s>",    // Enter password
+    "${var.ssh_password}<enter><wait2s>",    // Enter password again
+    "<tab><right><enter><wait2s>",           // Skip API key
+    "<tab><right><enter>",                   // Skip email address
+    "<wait4s><right><enter><wait4s>"         // Skip security updates
+  ]
+}
+
+source "virtualbox-iso" "boot" {
+  boot_wait                = "5s"
+  cpus                     = var.cpus
+  disk_size                = var.disk_size
+  guest_additions_mode     = "disable"
+  headless                 = var.headless
+  hard_drive_discard       = true
+  hard_drive_nonrotational = true
+  keep_registered          = true
+  memory                   = var.memory
+  output_directory         = var.output_dir
+  shutdown_command         = var.shutdown_command
+  skip_export              = true
+  ssh_password            = var.ssh_password
+  ssh_timeout             = "10000s"
+  ssh_username            = var.ssh_username
+  virtualbox_version_file  = ""
+  vm_name                  = source.name
+}
+
+build {
+  name = "boot"
+
+  source "virtualbox-iso.boot" {
+    boot_command  = local.boot_tkl14_15
+    guest_os_type = "Debian_64"
+    iso_checksum  = "171bb1c9fdba78830e7c5c0d084cf4b448ae564b041fff592f46a9306d51dbf7"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-14.2-jessie-amd64.iso",
+      "${var.iso_dir}/turnkey-core-14.2-jessie-amd64.iso",
+      var.iso_url
+    ]
+    name          = "tkl142"
+  }
+
+  source "virtualbox-iso.boot" {
+    boot_command  = local.boot_tkl14_15
+    guest_os_type = "Debian_64"
+    iso_checksum  = "7c2d654313e934df8a03772680c34cbbc03d93ec6a208961e5f0b85b1c2f68f1"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-15.0-stretch-amd64.iso",
+      "${var.iso_dir}/turnkey-core-15.0-stretch-amd64.iso",
+      var.iso_url
+    ]
+    name          = "tkl15"
+  }
+
+  source "virtualbox-iso.boot" {
+    boot_command             = [
+      "<enter><wait40s>",                      // Skip installer boot screen
+      "<enter><wait4s><left><enter>",          // Guided partitioning with LVM, and write to disk
+      "<wait4s><enter>",                       // Choose "90%"
+      "<wait20><left><enter>",                 // "Yes"; write changes to disk
+      "<wait60s><enter>",                      // Copying data to disk; "Yes"; Install GRUB
+      "<wait20><down><enter>",                 // Choose "Reboot system"
+      "<wait70s>",                             // Installation proceeds
+      "${var.ssh_password}<enter><wait2s>",    // Enter password
+      "${var.ssh_password}<enter><wait2s>",    // Enter password again
+      "<tab><right><enter><wait2s>",           // Skip API key
+      "<tab><right><enter>",                   // Skip email address
+      "<wait4s><right><enter><wait4s>"         // Skip security updates
+    ]
+    guest_os_type = "Debian_64"
+    iso_checksum  = "44e79c72781aa2483047552bce7e354838145406409d4a5a5175c8e13ab703ae"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-16.1-buster-amd64.iso",
+      "${var.iso_dir}/turnkey-core-16.1-buster-amd64.iso",
+      var.iso_url,
+      "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-core-16.1-buster-amd64.iso"
+    ]
+    name          = "tkl16"
+  }

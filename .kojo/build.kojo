@@ -21,21 +21,11 @@ jobs:
         if: github.event_name != 'push'
         run: |
           echo "MAKE_VARS=" >> $GITHUB_ENV
-      - name: Packer boot
+<% %w(boot install kernel update export).each do |stage| -%>
+      - name: Packer <%= stage %>
         run: |
-          gmake ${{ env.MAKE_VARS }} boot-${{ matrix.version }}
-      - name: Packer install
-        run: |
-          gmake ${{ env.MAKE_VARS }} install-${{ matrix.version }}
-      - name: Packer kernel
-        run: |
-          gmake ${{ env.MAKE_VARS }} kernel-${{ matrix.version }}
-      - name: Packer update
-        run: |
-          gmake ${{ env.MAKE_VARS }} update-${{ matrix.version }}
-      - name: Packer export
-        run: |
-          gmake ${{ env.MAKE_VARS }} export-${{ matrix.version }}
+          gmake ${{ env.MAKE_VARS }} <%= stage %>-${{ matrix.version }}
+<% end -%>
       - name: Packer upload
         if: github.ref_name == 'main'
         env:

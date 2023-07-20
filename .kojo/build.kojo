@@ -1,5 +1,11 @@
 name: Build boxes
+
 on: [push, pull_request, workflow_dispatch]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-packer:
     runs-on: macos-12

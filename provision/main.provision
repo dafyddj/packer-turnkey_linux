@@ -26,7 +26,12 @@
 
       echo "==> Setting up sudo"
       chronic apt-get --assume-yes install sudo
-      chronic adduser vagrant sudo
+      (cat <<EOP
+      %$VAGRANT_USER ALL=(ALL) NOPASSWD:ALL
+      EOP
+      ) > /tmp/vagrant
+      chmod 0440 /tmp/vagrant
+      mv /tmp/vagrant /etc/sudoers.d/
       EOF
     ]
   }

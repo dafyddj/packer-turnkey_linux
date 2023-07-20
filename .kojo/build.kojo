@@ -28,7 +28,7 @@ jobs:
         if: github.event_name != 'push'
         run: |
           echo "MAKE_VARS=" >> $GITHUB_ENV
-<% %w(boot install kernel update export).each do |stage| -%>
+<% IO.binread("stages").split.each do |stage| -%>
       - name: Packer <%= stage %>
         run: |
           gmake ${{ env.MAKE_VARS }} <%= stage %>-${{ matrix.version }}

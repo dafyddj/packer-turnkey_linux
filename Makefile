@@ -1,4 +1,3 @@
-#subdirs = boot install guestadd update provision export
-subdirs = boot install kernel update export
+subdirs := $(shell cat stages)
 
 include $(addsuffix /Makefile,$(subdirs))

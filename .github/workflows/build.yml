@@ -40,6 +40,9 @@ jobs:
       - name: Packer update
         run: |
           gmake ${{ env.MAKE_VARS }} update-${{ matrix.version }}
+      - name: Packer provision
+        run: |
+          gmake ${{ env.MAKE_VARS }} provision-${{ matrix.version }}
       - name: Packer export
         run: |
           gmake ${{ env.MAKE_VARS }} export-${{ matrix.version }}

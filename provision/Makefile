@@ -6,14 +6,14 @@ _ROOT := ${_ROOT}
 
 include $(_ROOT)/root.mk
 
-$(call depends_on,provision)
+$(call depends_on,update)
 
 include $(_ROOT)/pre.mk
 
 srcs := main.cat.pkr.hcl
-artifact_ext := $(boxext)
+artifact_pre := .
+artifact_ext := $(snapext)
 
-$(_module_name)_depends_on := provision_artifact_$$*
-$(_module_name)_output := $(_ROOT)/box/virtualbox
+$(_module_name)_depends_on := update_artifact_$$*
 
 include $(_ROOT)/post.mk

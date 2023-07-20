@@ -9,6 +9,10 @@ on:
         required: true
         description: Version of Vagrant box to release
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-packer-release:
     runs-on: macos-12

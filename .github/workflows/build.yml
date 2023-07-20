@@ -3,6 +3,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   run-packer:
     runs-on: macos-12
+    timeout-minutes: 30
     env:
       MAKE_VARS: --dry-run
       PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -10,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [tkl16]
+        version: [tkl16, tkl17]
     steps:
       - name: Prepare environment
         run: |

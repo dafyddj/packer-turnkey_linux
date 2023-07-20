@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [tkl16]
+        version: [tkl16, tkl17]
     steps:
       - name: Prepare environment
         run: |

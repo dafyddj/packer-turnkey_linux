@@ -53,3 +53,7 @@ build {
   source "virtualbox-vm.kernel" {
     name    = "tkl16"
   }
+
+  source "virtualbox-vm.kernel" {
+    name    = "tkl17"
+  }

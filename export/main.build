@@ -39,7 +39,7 @@ variable "ssh_username" {
 }
 
 source "virtualbox-vm" "export" {
-  attach_snapshot         = "updated"
+  attach_snapshot         = "provisioned"
   boot_wait               = "-1s"
   force_delete_snapshot   = true
   guest_additions_mode    = "disable"

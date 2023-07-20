@@ -125,6 +125,35 @@ locals {
     "<tab><right><enter>",                   // Skip email address
     "<wait4s><right><enter><wait4s>"         // Skip security updates
   ]
+  boot_tkl16 = [
+    "<enter><wait40s>",                      // Skip installer boot screen
+    "<enter><wait4s><left><enter>",          // Guided partitioning with LVM, and write to disk
+    "<wait4s><enter>",                       // Choose "90%"
+    "<wait20><left><enter>",                 // "Yes"; write changes to disk
+    "<wait60s><enter>",                      // Copying data to disk; "Yes"; Install GRUB
+    "<wait20><down><enter>",                 // Choose "Reboot system"
+    "<wait70s>",                             // Installation proceeds
+    "${var.ssh_password}<enter><wait2s>",    // Enter password
+    "${var.ssh_password}<enter><wait2s>",    // Enter password again
+    "<tab><right><enter><wait2s>",           // Skip API key
+    "<tab><right><enter>",                   // Skip email address
+    "<wait4s><right><enter><wait4s>"         // Skip security updates
+  ]
+  boot_tkl17 = [
+    "<enter><wait30>",                      // Skip installer boot screen
+    "<enter><wait3><left><enter>",          // Guided partitioning with LVM, and write to disk
+    "<wait3><enter>",                       // Choose "90%"
+    "<wait20><left><enter>",                // "Yes"; write changes to disk
+    "<wait60><enter>",                      // Copying data to disk; "Yes"; Install GRUB
+    "<wait60><up><enter>",                  // Removing live packages; Choose "Eject and Reboot"
+    "<wait4><enter>",                       // "Enter" to continue
+    "<wait70>",                             // Installation proceeds
+    "${var.ssh_password}<enter><wait2>",    // Enter password
+    "${var.ssh_password}<enter><wait2>",    // Enter password again
+    "<tab><right><enter><wait2>",           // Skip API key
+    "<tab><right><enter>",                  // Skip email address
+    "<wait2><right><enter><wait3>"          // Skip security updates
+  ]
 }
 
 source "virtualbox-iso" "boot" {
@@ -132,6 +161,7 @@ source "virtualbox-iso" "boot" {
   cpus                     = var.cpus
   disk_size                = var.disk_size
   guest_additions_mode     = "disable"
+  guest_os_type = "Debian_64"
   headless                 = var.headless
   hard_drive_discard       = true
   hard_drive_nonrotational = true
@@ -152,7 +182,6 @@ build {
 
   source "virtualbox-iso.boot" {
     boot_command  = local.boot_tkl14_15
-    guest_os_type = "Debian_64"
     iso_checksum  = "171bb1c9fdba78830e7c5c0d084cf4b448ae564b041fff592f46a9306d51dbf7"
     iso_urls      = [
       "${var.root_dir}/iso/turnkey-core-14.2-jessie-amd64.iso",
@@ -164,7 +193,6 @@ build {
 
   source "virtualbox-iso.boot" {
     boot_command  = local.boot_tkl14_15
-    guest_os_type = "Debian_64"
     iso_checksum  = "7c2d654313e934df8a03772680c34cbbc03d93ec6a208961e5f0b85b1c2f68f1"
     iso_urls      = [
       "${var.root_dir}/iso/turnkey-core-15.0-stretch-amd64.iso",
@@ -175,21 +203,7 @@ build {
   }
 
   source "virtualbox-iso.boot" {
-    boot_command             = [
-      "<enter><wait40s>",                      // Skip installer boot screen
-      "<enter><wait4s><left><enter>",          // Guided partitioning with LVM, and write to disk
-      "<wait4s><enter>",                       // Choose "90%"
-      "<wait20><left><enter>",                 // "Yes"; write changes to disk
-      "<wait60s><enter>",                      // Copying data to disk; "Yes"; Install GRUB
-      "<wait20><down><enter>",                 // Choose "Reboot system"
-      "<wait70s>",                             // Installation proceeds
-      "${var.ssh_password}<enter><wait2s>",    // Enter password
-      "${var.ssh_password}<enter><wait2s>",    // Enter password again
-      "<tab><right><enter><wait2s>",           // Skip API key
-      "<tab><right><enter>",                   // Skip email address
-      "<wait4s><right><enter><wait4s>"         // Skip security updates
-    ]
-    guest_os_type = "Debian_64"
+    boot_command  = local.boot_tkl16
     iso_checksum  = "44e79c72781aa2483047552bce7e354838145406409d4a5a5175c8e13ab703ae"
     iso_urls      = [
       "${var.root_dir}/iso/turnkey-core-16.1-buster-amd64.iso",
@@ -198,4 +212,16 @@ build {
       "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-core-16.1-buster-amd64.iso"
     ]
     name          = "tkl16"
+  }
+
+  source "virtualbox-iso.boot" {
+    boot_command  = local.boot_tkl17
+    iso_checksum  = "e89d421a4d46a4a35c583b9e6a18a6a5a11d373209d0d30a82c193492af60222"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-17.1-bullseye-amd64.iso",
+      "${var.iso_dir}/turnkey-core-17.1-bullseye-amd64.iso",
+      var.iso_url,
+      "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-core-17.1-bullseye-amd64.iso"
+    ]
+    name          = "tkl17"
   }

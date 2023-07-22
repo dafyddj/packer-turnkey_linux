@@ -1,3 +1,36 @@
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }
+
+  provisioner "shell" {
+    inline = [<<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      echo "Disk usage before minimization..."
+      df -h
+
+      echo "==> Removing all linux kernels except the current one"
+      dpkg --list | awk '{print $2}' | grep -E 'linux-image-[[:digit:]]' \
+        | grep -v $(uname -r) | xargs apt-get --assume-yes purge
+
+      echo "Disk usage after minimization..."
+      df -h
+
+      echo '==> Zeroing out free space on root fs'
+      cat /dev/zero > /zeros 2>/dev/null || true; sync; rm /zeros
+
+      echo '==> TRIM the root fs'
+      fstrim -v /
+
+      echo "Disk usage after cleanup..."
+      df -h
+      EOF
+    ]
+  }
+
+  provisioner "breakpoint" {
+    disable = var.disable_breakpoint
+  }
+
   post-processor "vagrant" {
     output               = "${var.box_dir}/${source.name}.box"
     vagrantfile_template = ""

@@ -17,7 +17,7 @@ vdiext = .vdi
 snapext := .snapshot
 boxext := .box
 
-os_vers := tkl142 tkl15 tkl16 tkl17
+os_vers := $(shell cat os_vers)
 
 artifact_pre :=
 extra_srcs :=

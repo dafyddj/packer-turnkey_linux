@@ -7,9 +7,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  gov:
+    name: Get OS versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      os-versions: ${{ steps.get-os-versions.outputs.os-versions }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: get-os-versions
+        run: |
+          VERSIONS=$(jq -cR 'split(" ")' os_vers)
+          OUTPUT="os-versions=$VERSIONS"
+          echo "Setting '$OUTPUT'"
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
   run-packer:
     runs-on: macos-12
     timeout-minutes: 30
+    needs: gov
     env:
       MAKE_VARS: --dry-run
       PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -17,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [tkl16, tkl17]
+        version: ${{ fromJSON(needs.gov.outputs.os-versions) }}
     steps:
       - name: Prepare environment
         run: |

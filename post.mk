@@ -1,25 +1,25 @@
 $(_module_name)_srcs := $(addprefix $(_module_path)/,$(srcs)) $(extra_srcs)
-$(_module_name)_targets := $(addprefix $(_module_name)-,$(win_vers))
+$(_module_name)_targets := $(addprefix $(_module_name)-,$(os_vers))
 
-$(foreach win_ver,$(win_vers), \
-  $(eval $(_module_name)_artifact_$(win_ver) := $($(_module_name)_output)/$(artifact_pre)$(win_ver)$(artifact_ext)))
-$(_module_name)_artifacts := $(foreach win_ver,$(win_vers),$($(_module_name)_artifact_$(win_ver)))
+$(foreach os_ver,$(os_vers), \
+  $(eval $(_module_name)_artifact_$(os_ver) := $($(_module_name)_output)/$(artifact_pre)$(os_ver)$(artifact_ext)))
+$(_module_name)_artifacts := $(foreach os_ver,$(os_vers),$($(_module_name)_artifact_$(os_ver)))
 
 ifneq ($(_NO_RULES),T)
 ifneq ($($(_module_name)_defined),T)
 all: $($(_module_name)_targets)
 
-.PHONY: $(_module_name) $($(_module_name)_targets) $(win_vers)
+.PHONY: $(_module_name) $($(_module_name)_targets) $(os_vers)
 $(_module_name): $($(_module_name)_targets)
-$(win_vers): %: $(_module_name)-%
+$(os_vers): %: $(_module_name)-%
 .SECONDEXPANSION:
 $($(_module_name)_targets): $(_module_name)-%: $$($(_module_name)_artifact_%)
 
 _CLEAN := clean-$(_module_name)
-_CLEAN_2 := $(addprefix $(_CLEAN)-,$(win_vers))
+_CLEAN_2 := $(addprefix $(_CLEAN)-,$(os_vers))
 .PHONY: clean $(_CLEAN_1) $(_CLEAN_2)
 clean: $(_CLEAN)
-$(_CLEAN): %: $(addprefix %-,$(win_vers))
+$(_CLEAN): %: $(addprefix %-,$(os_vers))
 $(_CLEAN_2): clean-$(_module_name)-%:
 	$(info Cleaning $($(_module_name)_output)/$*$(artifact_ext))
 

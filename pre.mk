@@ -17,7 +17,7 @@ vdiext = .vdi
 snapext := .snapshot
 boxext := .box
 
-os_vers := $(shell cat os_vers)
+os_vers := $(shell cat $(_ROOT)/os_vers)
 
 artifact_pre :=
 extra_srcs :=

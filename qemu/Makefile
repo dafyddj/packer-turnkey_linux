@@ -10,12 +10,16 @@ include $(_ROOT)/pre.mk
 srcs := main.cat.pkr.hcl
 artifact_ext = $(boxext)
 
+auto_version := $(shell $(_ROOT)/bin/version)
+VERSION ?= $(auto_version)
+_module_pvars :=  -var version=$(VERSION)
+
 $(_module_name)_output := $(_ROOT)/box/qemu
 
 include $(_ROOT)/post.mk
 
 stages := $(shell cat $(_ROOT)/stages)
-stages := $(filter-out install, $(stages))
+stages := $(filter-out install, $(stages)) qemu
 stages := $(addprefix $(_ROOT)/, $(addsuffix /main.provision, $(stages)))
 
 $(_ROOT)/qemu/main.cat.pkr.hcl: $(_ROOT)/qemu/main.build $(stages)

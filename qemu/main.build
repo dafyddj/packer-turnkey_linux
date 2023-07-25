@@ -11,9 +11,24 @@ packer {
   }
 }
 
+variable "accelerator" {
+  type    = string
+  default = "hvf"
+}
+
 variable "box_dir" {
   type    = string
   default = "../box/qemu"
+}
+
+variable "cm" {
+  type    = string
+  default = "nocm"
+}
+
+variable "cm_version" {
+  type    = string
+  default = ""
 }
 
 variable "cpus" {
@@ -51,9 +66,19 @@ variable "memory" {
   default = "512"
 }
 
+variable "no_release" {
+  type    = bool
+  default = false
+}
+
 variable "output_dir" {
   type    = string
   default = "../vms/qemu"
+}
+
+variable "prefix" {
+  type    = string
+  default = "test-"
 }
 
 variable "root_dir" {
@@ -78,7 +103,7 @@ variable "ssh_username" {
 
 variable "version" {
   type    = string
-  default = "0.1.0"
+  default = "0.0.1pre"
 }
 
 locals {

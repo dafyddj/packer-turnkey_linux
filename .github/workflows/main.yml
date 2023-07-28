@@ -1,4 +1,4 @@
-name: Build dev boxes
+name: Build boxes
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -43,15 +43,10 @@ jobs:
         if: github.event_name != 'push'
         run: |
           echo "MAKE_VARS=" >> $GITHUB_ENV
-<% IO.binread("stages").split.each do |stage| -%>
-      - name: Packer <%= stage %>
+      - name: Run Packer
         run: |
-          gmake ${{ env.MAKE_VARS }} <%= stage %>-${{ matrix.version }}
-<% end -%>
-      - name: Packer upload
-        if: github.ref_name == 'main'
-        env:
-          PKR_VAR_no_release: false
-        run: |
-          cd upload
-          gmake ${{ env.MAKE_VARS }} ${{ matrix.version }}
+          gmake ${{ env.MAKE_VARS }} -f qemu/Makefile
+      - if: ${{ failure() }}
+        run: brew install tmux
+      - if: ${{ failure() }}
+        uses: dafyddj/action-sshd-cloudflared@master

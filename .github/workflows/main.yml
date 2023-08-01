@@ -26,9 +26,8 @@ jobs:
     timeout-minutes: 30
     needs: gov
     env:
-      MAKE_VARS: --dry-run
+      MAKE_VARS: ~
       PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      VAGRANT_CLOUD_TOKEN: ${{ secrets.VAGRANT_CLOUD_TOKEN }}
     strategy:
       fail-fast: false
       matrix:
@@ -39,13 +38,14 @@ jobs:
           brew install make
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set to not dry-run
-        if: github.event_name != 'push'
-        run: |
-          echo "MAKE_VARS=" >> $GITHUB_ENV
       - name: Run Packer
         run: |
           gmake ${{ env.MAKE_VARS }} -f qemu/Makefile
+      - name: Upload box
+        uses: actions/upload-artifact@v3
+        with:
+          name: box
+          path: box/qemu/${{ matrix.version }}.box
       - if: ${{ failure() }}
         run: brew install tmux
       - if: ${{ failure() }}

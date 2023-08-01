@@ -19,7 +19,7 @@ $(_module_name)_output := $(_ROOT)/box/qemu
 include $(_ROOT)/post.mk
 
 stages := $(shell cat $(_ROOT)/stages)
-stages := $(filter-out install, $(stages)) qemu
+stages := $(filter-out install, $(stages))
 stages := $(addprefix $(_ROOT)/, $(addsuffix /main.provision, $(stages)))
 
 $(_ROOT)/qemu/main.cat.pkr.hcl: $(_ROOT)/qemu/main.build $(stages)

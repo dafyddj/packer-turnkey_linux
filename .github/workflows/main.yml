@@ -41,7 +41,7 @@ jobs:
       - name: Run Packer
         run: |
           gmake ${{ env.MAKE_VARS }} -f qemu/Makefile
-      - name: Upload box
+      - name: Upload box as artifact
         uses: actions/upload-artifact@v3
         with:
           name: box

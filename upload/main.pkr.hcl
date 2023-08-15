@@ -1,3 +1,8 @@
+variable "arch" {
+  type    = string
+  default = "x64"
+}
+
 variable "box_dir" {
   type    = string
   default = "../box/virtualbox"
@@ -23,6 +28,11 @@ variable "prefix" {
   default = "test-"
 }
 
+variable "vagrant_cloud_org" {
+  type    = string
+  default = "techneg"
+}
+
 variable "version" {
   type    = string
   default = "0.0.1pre"
@@ -36,10 +46,18 @@ build {
   name = "upload"
 
   source "null.upload" {
-    name    = "tkl16"
-  }
-
-  source "null.upload" {
     name    = "tkl17"
   }
- 
+
+  post-processors {
+    post-processor "artifice" {
+      files = [ "${var.box_dir}/${source.name}.box" ]
+    }
+
+    post-processor "vagrant-cloud" {
+      box_tag = "${var.vagrant_cloud_org}/${var.prefix}${source.name}-x64-${var.cm}"
+      version = "${var.version}"
+      no_release = var.no_release
+    }
+  }
+}

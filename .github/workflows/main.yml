@@ -1,52 +1,30 @@
 name: Build boxes
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  - pull_request
+  - push
+  - workflow_dispatch
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  gov:
-    name: Get OS versions
+  pre-commit:
+    name: Run `pre-commit`
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      os-versions: ${{ steps.get-os-versions.outputs.os-versions }}
     steps:
-      - uses: actions/checkout@v3
-      - id: get-os-versions
-        run: |
-          VERSIONS=$(jq -cR 'split(" ")' os_vers)
-          OUTPUT="os-versions=$VERSIONS"
-          echo "Setting '$OUTPUT'"
-          echo "$OUTPUT" >> $GITHUB_OUTPUT
-  run-packer:
-    runs-on: macos-12
-    timeout-minutes: 30
-    needs: gov
-    env:
-      MAKE_VARS: ~
-      PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ${{ fromJSON(needs.gov.outputs.os-versions) }}
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+    - uses: pre-commit/action@v3.0.0
+  build-boxes:
+    uses: dafyddj/packer-tinycore_linux/.github/workflows/build.yml@v1
+    secrets: inherit
+  results:
+    name: Collect results
+    needs:
+      - pre-commit
+      - build-boxes
+    runs-on: ubuntu-latest
     steps:
-      - name: Prepare environment
-        run: |
-          brew install make
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Run Packer
-        run: |
-          gmake ${{ env.MAKE_VARS }} -f qemu/Makefile
-      - name: Upload box as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: box
-          path: box/qemu/${{ matrix.version }}.box
-      - if: ${{ failure() }}
-        run: brew install tmux
-      - if: ${{ failure() }}
-        uses: dafyddj/action-sshd-cloudflared@master
+      - run: echo "Tests succeeded!"

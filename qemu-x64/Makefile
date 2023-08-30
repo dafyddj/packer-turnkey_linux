@@ -5,19 +5,25 @@ _ROOT ?= $(patsubst %/root.mk,%,$(call _find,$(CURDIR),root.mk))
 _ROOT := $(_ROOT)
 
 include $(_ROOT)/root.mk
-
-$(call depends_on,export)
-
 include $(_ROOT)/pre.mk
 
 srcs := main.cat.pkr.hcl
-artifact_pre := .
-artifact_ext := $(snapext)
+artifact_ext = $(boxext)
 
 auto_version := $(shell $(_ROOT)/bin/version)
 VERSION ?= $(auto_version)
 _module_pvars :=  -var version=$(VERSION)
 
-$(_module_name)_depends_on := export_artifact_$$*
+$(_module_name)_output := $(_ROOT)/box/qemu-x64
 
 include $(_ROOT)/post.mk
+
+stages := $(shell cat $(_ROOT)/stages)
+stages := $(filter-out install, $(stages))
+stages := $(addprefix $(_ROOT)/, $(addsuffix /main.provision, $(stages)))
+
+$(_ROOT)/qemu-x64/main.cat.pkr.hcl: $(_ROOT)/qemu-x64/main.build $(stages)
+	$(info Making $@)
+	@cat $^ > $@
+	@echo } >> $@
+	@$(PACKER) init $@

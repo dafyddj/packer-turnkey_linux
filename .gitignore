@@ -3,6 +3,7 @@
 
 /iso
 
+.kitchen/
 .vagrant/
 output-*/
 packer_cache/

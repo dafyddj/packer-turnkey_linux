@@ -43,6 +43,7 @@ $($(_module_name)_output)/$(artifact_pre)%$(snapext): $($(_module_name)_srcs) $$
 .SECONDEXPANSION:
 $($(_module_name)_output)/$(artifact_pre)%$(boxext): $($(_module_name)_srcs) $$($($(_module_name)_depends_on))
 	$(info Making $@)
+	[ -n ${GITHUB_ACTIONS+1} ] && echo "vagrant-box=$@" >> $$GITHUB_OUTPUT || true
 	@$(VBOXMANAGE) controlvm $* poweroff 2>/dev/null || true
 	@$(PACKER) build $(PFLAGS) $(_pvars) -var "root_dir=$(_ROOT)" -var "box_dir=$(@D)" -only \*.$* $(_path)
 

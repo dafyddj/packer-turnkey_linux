@@ -1,34 +1,33 @@
 ---
 driver:
   name: vagrant
-
-transport:
-  max_ssh_sessions: 1     #See https://github.com/test-kitchen/test-kitchen/issues/1035#issuecomment-283189967
-
-verifier:
-  name: inspec
+  box_check_update: false
+  ssh:
+    insert_key: false
+<% if ENV.key?('TECHNEG_VAGRANT_PROVIDER') %>
+  provider: <%= ENV['TECHNEG_VAGRANT_PROVIDER'] %>
+<% else %>
+  provider: qemu
+<%   if ENV.key?('CI') %>
+  customize:
+    qemu_dir: /usr/local/share/qemu
+<%   end %>
+<% end %>
 
 provisioner:
-  name: salt_solo
-  log_level: info
-  require_chef: false
-  is_file_root: true
-  local_salt_root: test
+  name: dummy
+
+verifier:
+  name: shell
 
 platforms:
-  - name: debian
+  - name: turnkey_linux
     driver:
-<% if ENV.key?('PACKER_VAGRANT_BOX') %>
-      box: <%= ENV['PACKER_VAGRANT_BOX'] %>
-      box_url: <%= ENV['PACKER_VAGRANT_BOX_URL'] %>
+<% if ENV.key?('TECHNEG_VAGRANT_BOX') %>
+      box: <%= ENV['TECHNEG_VAGRANT_BOX'] %>
 <% else %>
-      box: techneg/tklcore-15
+      box: techneg/tkl17-x64-nocm
 <% end %>
 
 suites:
   - name: default
-    provisioner:
-      state_top:
-        base:
-          '*':
-            - dummy

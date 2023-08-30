@@ -7,13 +7,14 @@ repos:
 #    -   id: trailing-whitespace
 #    -   id: end-of-file-fixer
     -   id: check-yaml
+        exclude: ^kitchen.yml$
     -   id: check-added-large-files
-  - repo: local
-    hooks:
-      - id: kojo
-        name: Build Kojo templates
-        language: ruby
-        additional_dependencies: ["kojo"]
-        files: \.kojo/.*
-        pass_filenames: false
-        entry: kojo config .kojo/config.yaml --save .github/workflows
+#  - repo: local
+#    hooks:
+#      - id: kojo
+#        name: Build Kojo templates
+#        language: ruby
+#        additional_dependencies: ["kojo"]
+#        files: \.kojo/.*
+#        pass_filenames: false
+#        entry: kojo config .kojo/config.yaml --save .github/workflows

@@ -18,7 +18,7 @@ jobs:
     - uses: actions/setup-python@v4
     - uses: pre-commit/action@v3.0.0
   build-boxes:
-    uses: dafyddj/packer-tinycore_linux/.github/workflows/build.yml@v1
+    uses: dafyddj/workflow-packer-build/.github/workflows/build.yml@v1
     secrets: inherit
   results:
     name: Collect results

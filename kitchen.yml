@@ -8,10 +8,6 @@ driver:
   provider: <%= ENV['TECHNEG_VAGRANT_PROVIDER'] %>
 <% else %>
   provider: qemu
-<%   if ENV.key?('CI') %>
-  customize:
-    qemu_dir: /usr/local/share/qemu
-<%   end %>
 <% end %>
 
 provisioner:

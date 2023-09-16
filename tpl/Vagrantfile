@@ -1,14 +1,34 @@
 Vagrant.configure("2") do |config|
 
+  $arch = `uname -m`.strip
+  $kernel = `uname -s`.strip
+  accel = { "Darwin" => "hvf", "Linux" => "kvm" }
+
+  def arm64?()
+    $arch == "arm64"
+  end
+
+  def macOS?()
+    $kernel == "Darwin"
+  end
+
+  accel_property = ""
+  accel_property = ",accel=#{accel[$kernel]}" if !arm64?()
+
+  qemu_dir = "/usr/bin"
+  qemu_dir = "/usr/local/share/qemu" if macOS?
+  qemu_dir = "/opt/homebrew/share/qemu" if macOS? && arm64?()
+
+
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.provider "qemu" do |qe|
     qe.arch = "x86_64"
-    qe.machine = "pc"
-    qe.memory = "512M"
     qe.cpu = "qemu64"
+    qe.machine = "q35#{accel_property}"
+    qe.memory = "512M"
     qe.net_device = "virtio-net-pci"
+    qe.qemu_dir = qemu_dir
   end
 
 end
-

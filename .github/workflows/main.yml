@@ -20,6 +20,8 @@ jobs:
   build-boxes:
     uses: dafyddj/workflow-packer-build/.github/workflows/build.yml@v1
     secrets: inherit
+    with:
+      build-runner: buildjet-2vcpu-ubuntu-2204
   results:
     name: Collect results
     needs:

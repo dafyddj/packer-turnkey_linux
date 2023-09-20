@@ -1,0 +1,150 @@
+packer {
+  required_plugins {
+    vagrant = {
+      source  = "github.com/hashicorp/vagrant"
+      version = "~> 1"
+    }
+  }
+}
+
+variable "box_dir" {
+  type    = string
+  default = "../box/vbox-x64"
+}
+
+variable "cm" {
+  type    = string
+  default = "nocm"
+}
+
+variable "cm_version" {
+  type    = string
+  default = ""
+}
+
+variable "cpus" {
+  type    = string
+  default = "1"
+}
+
+variable "disable_breakpoint" {
+  type    = bool
+  default = true
+}
+
+variable "disk_size" {
+  type    = string
+  default = "10240"
+}
+
+variable "headless" {
+  type    = bool
+  default = true
+}
+
+variable "iso_dir" {
+  type    = string
+  default = "../iso"
+}
+
+variable "iso_url" {
+  type    = string
+  default = "https://example.com/tkl.iso"
+}
+
+variable "memory" {
+  type    = string
+  default = "512"
+}
+
+variable "no_release" {
+  type    = bool
+  default = false
+}
+
+variable "output_dir" {
+  type    = string
+  default = "../vms/vbox-x64"
+}
+
+variable "prefix" {
+  type    = string
+  default = "test-"
+}
+
+variable "root_dir" {
+  type    = string
+  default = ".."
+}
+
+variable "shutdown_command" {
+  type    = string
+  default = "shutdown -h now"
+}
+
+variable "ssh_password" {
+  type    = string
+  default = "Vagrant1"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "root"
+}
+
+variable "version" {
+  type    = string
+  default = "0.0.1pre"
+}
+
+locals {
+  boot_tkl17 = [
+    "<enter><wait30>",                      // Skip installer boot screen
+    "<enter><wait3><left><enter>",          // Guided partitioning with LVM, and write to disk
+    "<wait3><enter>",                       // Choose "90%"
+    "<wait20><left><enter>",                // "Yes"; write changes to disk
+    "<wait60><enter>",                      // Copying data to disk; "Yes"; Install GRUB
+    "<wait60><up><enter>",                  // Removing live packages; Choose "Eject and Reboot"
+    "<wait4><enter>",                       // "Enter" to continue
+    "<wait70>",                             // Installation proceeds
+    "${var.ssh_password}<enter><wait2>",    // Enter password
+    "${var.ssh_password}<enter><wait2>",    // Enter password again
+    "<tab><right><enter><wait2>",           // Skip API key
+    "<tab><right><enter>",                  // Skip email address
+    "<wait2><right><enter><wait3>"          // Skip security updates
+  ]
+}
+
+source "virtualbox-iso" "boot" {
+  boot_wait                = "5s"
+  cpus                     = var.cpus
+  disk_size                = var.disk_size
+  guest_additions_mode     = "disable"
+  guest_os_type            = "Debian_64"
+  headless                 = var.headless
+  hard_drive_discard       = true
+  hard_drive_nonrotational = true
+  memory                   = var.memory
+  output_directory         = var.output_dir
+  shutdown_command         = var.shutdown_command
+  ssh_password            = var.ssh_password
+  ssh_timeout             = "10000s"
+  ssh_username            = var.ssh_username
+  virtualbox_version_file  = ""
+  vm_name                  = source.name
+}
+
+build {
+  name = "build"
+
+  source "virtualbox-iso.boot" {
+    boot_command  = local.boot_tkl17
+    iso_checksum  = "e89d421a4d46a4a35c583b9e6a18a6a5a11d373209d0d30a82c193492af60222"
+    iso_urls      = [
+      "${var.root_dir}/iso/turnkey-core-17.1-bullseye-amd64.iso",
+      "${var.iso_dir}/turnkey-core-17.1-bullseye-amd64.iso",
+      var.iso_url,
+      "http://mirror.turnkeylinux.org/turnkeylinux/images/iso/turnkey-core-17.1-bullseye-amd64.iso"
+    ]
+    name          = "tkl17"
+  }

@@ -119,6 +119,8 @@ source "virtualbox-iso" "boot" {
   boot_wait                = "5s"
   cpus                     = var.cpus
   disk_size                = var.disk_size
+  gfx_controller           = "vmsvga"
+  gfx_vram_size            = 16
   guest_additions_mode     = "disable"
   guest_os_type            = "Debian_64"
   headless                 = var.headless

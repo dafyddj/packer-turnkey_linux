@@ -99,19 +99,19 @@ variable "version" {
 
 locals {
   boot_tkl17 = [
-    "<enter><wait30>",                      // Skip installer boot screen
+    "<enter><wait70>",                      // Skip installer boot screen
     "<enter><wait3><left><enter>",          // Guided partitioning with LVM, and write to disk
     "<wait3><enter>",                       // Choose "90%"
     "<wait20><left><enter>",                // "Yes"; write changes to disk
-    "<wait60><enter>",                      // Copying data to disk; "Yes"; Install GRUB
-    "<wait60><up><enter>",                  // Removing live packages; Choose "Eject and Reboot"
+    "<wait100><enter>",                     // Copying data to disk; "Yes"; Install GRUB
+    "<wait80><up><enter>",                  // Removing live packages; Choose "Eject and Reboot"
     "<wait4><enter>",                       // "Enter" to continue
     "<wait70>",                             // Installation proceeds
     "${var.ssh_password}<enter><wait2>",    // Enter password
     "${var.ssh_password}<enter><wait2>",    // Enter password again
     "<tab><right><enter><wait2>",           // Skip API key
     "<tab><right><enter>",                  // Skip email address
-    "<wait2><right><enter><wait3>"          // Skip security updates
+    "<wait5><right><enter><wait3>"          // Skip security updates
   ]
 }
 

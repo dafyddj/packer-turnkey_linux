@@ -6,6 +6,9 @@ on:
   schedule:
     - cron: 7 10 * * 6
   workflow_dispatch:
+    inputs:
+      runner-label:
+        description: Pick a label to choose a runner
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,6 +25,8 @@ jobs:
   build-boxes:
     uses: dafyddj/workflow-packer-build/.github/workflows/build.yml@v1
     secrets: inherit
+    with:
+      build-runner: ${{ inputs.runner-label || 'macos-12' }}
   results:
     name: Collect results
     needs:

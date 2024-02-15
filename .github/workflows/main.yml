@@ -4,11 +4,8 @@ on:
   pull_request:
   push:
   schedule:
-    - cron: 7 10 * * 6
+    - cron: 4 15 * * 6
   workflow_dispatch:
-    inputs:
-      runner-label:
-        description: Pick a label to choose a runner
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,19 +15,66 @@ jobs:
   pre-commit:
     name: Run `pre-commit`
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-    - uses: pre-commit/action@v3.0.0
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+    - uses: pre-commit/action@v3.0.1
+  gbt:
+    name: Get build types
+    needs: pre-commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      build-types: ${{ steps.get-build-types.outputs.build-types }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: get-build-types
+        run: |
+          BUILDS=$(jq -cR 'split(" ")' builds)
+          OUTPUT="build-types=$BUILDS"
+          echo "Setting '$OUTPUT'"
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+  gov:
+    name: Get OS versions
+    needs: pre-commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      os-versions: ${{ steps.get-os-versions.outputs.os-versions }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: get-os-versions
+        run: |
+          VERSIONS=$(jq -cR 'split(" ")' os_vers)
+          OUTPUT="os-versions=$VERSIONS"
+          echo "Setting '$OUTPUT'"
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
   build-boxes:
-    uses: dafyddj/workflow-packer-build/.github/workflows/build.yml@v1
+    needs:
+      - gbt
+      - gov
+    uses: dafyddj/workflow-packer-build/.github/workflows/build.yml@v2
     secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        build-os-version: ${{ fromJSON(needs.gov.outputs.os-versions) }}
+        build-runner: [buildjet-2vcpu-ubuntu-2204, virtualbox]
+        build-type: ${{ fromJSON(needs.gbt.outputs.build-types) }}
+        exclude:
+          - build-type: qemu-x64
+            build-runner: virtualbox
+          - build-type: vbox-x64
+            build-runner: buildjet-2vcpu-ubuntu-2204
     with:
-      build-runner: ${{ inputs.runner-label || 'macos-12' }}
+      build-os-version: ${{ matrix.build-os-version }}
+      build-runner: ${{ matrix.build-runner }}
+      build-type: ${{ matrix.build-type }}
+      timeout-minutes: 20
   results:
     name: Collect results
     needs:
-      - pre-commit
       - build-boxes
     runs-on: ubuntu-latest
     steps:

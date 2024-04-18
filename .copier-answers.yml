@@ -1,0 +1,4 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v1.0.0
+_src_path: gh:dafyddj/copier-packer-build
+box_name: techneg/tkl17-x64-nocm

@@ -54,7 +54,7 @@ jobs:
     needs:
       - gbt
       - gov
-    uses: dafyddj/workflow-packer-build/.github/workflows/build.yml@v2
+    uses: ./.github/workflows/libbuild.yml
     secrets: inherit
     strategy:
       fail-fast: false

@@ -57,3 +57,7 @@ build {
   source "virtualbox-vm.update" {
     name    = "tkl17"
   }
+
+  source "virtualbox-vm.update" {
+    name    = "tkl18"
+  }

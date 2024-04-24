@@ -57,3 +57,7 @@ build {
   source "virtualbox-vm.provision" {
     name    = "tkl17"
   }
+
+  source "virtualbox-vm.provision" {
+    name    = "tkl18"
+  }

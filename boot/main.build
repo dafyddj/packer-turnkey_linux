@@ -227,7 +227,7 @@ build {
   }
 
   source "virtualbox-iso.boot" {
-    boot_command  = local.boot_tkl18
+    boot_command  = local.boot_tkl17
     iso_checksum  = "5cf017d2befe91556c8b79311ec6ec8a66f9ecf1bf358c182306196cfaa2ddde"
     iso_urls      = [
       "${var.root_dir}/iso/turnkey-core-18.0-bookworm-amd64.iso",

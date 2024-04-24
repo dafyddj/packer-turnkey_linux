@@ -71,3 +71,7 @@ build {
   source "virtualbox-vm.export" {
     name    = "tkl17"
   }
+
+  source "virtualbox-vm.export" {
+    name    = "tkl18"
+  }

@@ -28,6 +28,7 @@ jobs:
     runs-on: ${{ inputs.build-runner }}
     timeout-minutes: ${{ inputs.timeout-minutes }}
     env:
+      CHEF_LICENSE: accept-silent
       MAKE_VARS: ""
     steps:
       - name: Checkout repository
@@ -68,21 +69,24 @@ jobs:
         run: vagrant plugin install vagrant-qemu
       - name: Install Test Kitchen
         if: ${{ !startsWith(runner.name, 'self') }}
-        run: |
-          echo ::group::Installing Chef Workstation
-          kernel_name=$(uname -s)
-          if [ "$kernel_name" == "Linux" ]; then
-            wget --no-verbose https://packages.chef.io/files/stable/chef-workstation/23.7.1042/ubuntu/22.04/chef-workstation_23.7.1042-1_amd64.deb
-            sudo dpkg --install chef-workstation_23.7.1042-1_amd64.deb
-          elif [ "$kernel_name" == "Darwin" ]; then
-            sudo echo "Refresh sudo cached credential"
-            brew install chef-workstation
-          fi
-          echo ::endgroup::
-          chef -v
+        uses: actionshub/chef-install@d41f8dde8642d5cd05abefa333fbf2784cff830c # 3.0.0
+        env:
+          # renovate: datasource=github-tags depName=chef/chef-workstation
+          CHEF_WS_VERSION: 24.2.1058
+        with:
+          project: chef-workstation
+          version: ${{ env.CHEF_WS_VERSION }}
       - name: Prepare Test Kitchen
-        if: startsWith(inputs.build-type, 'vbox')
-        run: echo TECHNEG_VAGRANT_PROVIDER=virtualbox >> $GITHUB_ENV
+        env:
+          # renovate: datasource=rubygems depName=kitchen-salt
+          KITCHEN-SALT_VERSION: 0.7.2
+        run: |
+          if [[ "${{ inputs.build-type }}" == vbox* ]]; then
+            echo TECHNEG_VAGRANT_PROVIDER=virtualbox >> $GITHUB_ENV
+          fi
+          if [[ "${{ runner.name }}" != self* ]]; then
+            chef gem install kitchen-salt --version ${{ env.KITCHEN-SALT_VERSION }}
+          fi
       - name: Run Test Kitchen
         env:
           TECHNEG_VAGRANT_BOX: ${{ steps.packer.outputs.vagrant-box }}

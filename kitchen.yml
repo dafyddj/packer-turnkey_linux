@@ -11,7 +11,13 @@ driver:
 <% end %>
 
 provisioner:
-  name: dummy
+  name: salt_solo
+  formula: test/salt
+  require_chef: false
+  state_top:
+    base:
+      "*":
+        - test.salt.dummy
 
 verifier:
   name: shell

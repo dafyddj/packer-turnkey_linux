@@ -12,49 +12,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  should_run:
+  should-run:
     name: Should run
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
+      should-run: ${{ steps.action.outputs.should-run }}
     steps:
-    - name: Check whether workflow should run
-      env:
-        GH_TOKEN: ${{ github.token }}
-      id: check
-      run: |
-        if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
-          echo "This run was triggered by a pull request event"
-          OUTPUT="should_run=true"
-          echo "Setting '$OUTPUT'"
-          echo "$OUTPUT" >> $GITHUB_OUTPUT
-          exit
-        fi
-        BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-        PR_COUNT=$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open" \
-                     | jq --arg branch "$BRANCH_NAME" '.[] | select(.head.ref == $branch) | .number' \
-                     | wc -l)
-        if [ $PR_COUNT -gt 0 ]; then
-          echo "There is an associated pull request for branch $BRANCH_NAME"
-          OUTPUT="should_run=false"
-          echo "Setting '$OUTPUT'"
-          echo "$OUTPUT" >> $GITHUB_OUTPUT
-        else
-          echo "There is no associated pull request for branch $BRANCH_NAME"
-          OUTPUT="should_run=true"
-          echo "Setting '$OUTPUT'"
-          echo "$OUTPUT" >> $GITHUB_OUTPUT
-        fi
+      - id: action
+        uses: dafyddj/should-workflow-run@v1
   pre-commit:
     name: Run `pre-commit`
-    needs: should_run
-    if: fromJSON(needs.should_run.outputs.should_run)
+    needs: should-run
+    if: fromJSON(needs.should-run.outputs.should-run)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-    - uses: pre-commit/action@v3.0.1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - uses: pre-commit/action@v3.0.1
   gbt:
     name: Get build types
     needs: pre-commit

@@ -32,6 +32,17 @@
       ) > /tmp/vagrant
       chmod 0440 /tmp/vagrant
       mv /tmp/vagrant /etc/sudoers.d/
+
+      echo "Configuring settings for Test Kitchen..."
+
+      echo '==> Setting `sshd` MaxSessions to default'
+      TURNKEY_VERSION=$(cat /etc/turnkey_version)
+      if echo "$TURNKEY_VERSION" | grep -qE '17'; then
+        SSHD_CONFIG=/etc/ssh/sshd_config
+      else
+        SSHD_CONFIG=/etc/ssh/sshd_config.d/turnkey.conf
+      fi
+      sed -i '/^MaxSessions 2/s/^/# /' $SSHD_CONFIG
       EOF
     ]
   }

@@ -32,7 +32,7 @@ jobs:
       MAKE_VARS: ""
     steps:
       - name: Checkout repository
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Debug on runner (When re-run with "Enable debug logging" checked)
         if: runner.debug
         uses: mxschmitt/action-tmate@a283f9441d2d96eb62436dc46d7014f5d357ac22 # v3
@@ -45,6 +45,10 @@ jobs:
         run: |
           kernel_name=$(uname -s)
           if [ "$kernel_name" == "Linux" ]; then
+            wget -O- https://apt.releases.hashicorp.com/gpg \
+              | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" \
+              | sudo tee /etc/apt/sources.list.d/hashicorp.list
             sudo apt update
             sudo apt --yes install vagrant $TECHNEG_VAGRANT_PROVIDER
           elif [ "$kernel_name" == "Darwin" ]; then
@@ -72,7 +76,7 @@ jobs:
         uses: actionshub/chef-install@d41f8dde8642d5cd05abefa333fbf2784cff830c # 3.0.0
         env:
           # renovate: datasource=github-tags depName=chef/chef-workstation
-          CHEF_WS_VERSION: 24.2.1058
+          CHEF_WS_VERSION: 24.4.1064
         with:
           project: chef-workstation
           version: ${{ env.CHEF_WS_VERSION }}

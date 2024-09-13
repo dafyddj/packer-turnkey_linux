@@ -76,7 +76,7 @@ jobs:
         uses: actionshub/chef-install@d41f8dde8642d5cd05abefa333fbf2784cff830c # 3.0.0
         env:
           # renovate: datasource=github-tags depName=chef/chef-workstation
-          CHEF_WS_VERSION: 24.4.1064
+          CHEF_WS_VERSION: 24.8.1068
         with:
           project: chef-workstation
           version: ${{ env.CHEF_WS_VERSION }}

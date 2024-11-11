@@ -14,6 +14,7 @@ provisioner:
   name: salt_solo
   formula: test/salt
   require_chef: false
+  salt_bootstrap_url: https://github.com/saltstack/salt-bootstrap/releases/latest/download/bootstrap-salt.sh
   state_top:
     base:
       "*":

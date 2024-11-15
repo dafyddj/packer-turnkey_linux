@@ -7,10 +7,15 @@
   "extends": [
     "config:recommended",
   ],
+  "automergeStrategy": "merge-commit",
   "git-submodules": {
     "enabled": true
   },
   "packageRules": [
+    {
+      "matchFileNames": ["template/**"],
+      "semanticCommitType": "fix",
+    },
     {
       "matchManagers": ["git-submodules"],
       "automerge": true,

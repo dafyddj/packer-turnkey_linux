@@ -71,13 +71,13 @@ jobs:
       fail-fast: false
       matrix:
         build-os-version: ${{ fromJSON(needs.gov.outputs.os-versions) }}
-        build-runner: [buildjet-2vcpu-ubuntu-2204, virtualbox]
+        build-runner: [ubuntu-24.04, virtualbox]
         build-type: ${{ fromJSON(needs.gbt.outputs.build-types) }}
         exclude:
           - build-type: qemu-x64
             build-runner: virtualbox
           - build-type: vbox-x64
-            build-runner: buildjet-2vcpu-ubuntu-2204
+            build-runner: ubuntu-24.04
     with:
       build-os-version: ${{ matrix.build-os-version }}
       build-runner: ${{ matrix.build-runner }}

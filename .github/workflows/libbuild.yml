@@ -32,10 +32,10 @@ jobs:
       MAKE_VARS: ""
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Debug on runner (When re-run with "Enable debug logging" checked)
         if: runner.debug
-        uses: mxschmitt/action-tmate@e5c7151931ca95bad1c6f4190c730ecf8c7dde48 # v3.19
+        uses: mxschmitt/action-tmate@c0afd6f790e3a5564914980036ebf83216678101 # v3.23
         with:
           detached: true
       - name: Install virtualisation software
@@ -63,6 +63,9 @@ jobs:
           kernel_name=$(uname -s)
           if [ "$kernel_name" == "Linux" ]; then
             echo PKR_VAR_accelerator=kvm >> $GITHUB_ENV
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
           elif [ "$kernel_name" == "Darwin" ]; then
             : # No action needed for Darwin
           fi
@@ -77,10 +80,10 @@ jobs:
         run: vagrant plugin install vagrant-qemu
       - name: Install Test Kitchen
         if: ${{ !startsWith(runner.name, 'self') }}
-        uses: actionshub/chef-install@776a917c09d87c381d1d5342f83cd554223fa49c # 3.0.1
+        uses: actionshub/chef-install@998ca15464a2bafdc36d3970cffc0e32823b179d # 5.0.2
         env:
           # renovate: datasource=custom.omnitruck depName=chef-workstation
-          CHEF_WS_VERSION: 25.5.1084
+          CHEF_WS_VERSION: 25.13.7
         with:
           project: chef-workstation
           version: ${{ env.CHEF_WS_VERSION }}

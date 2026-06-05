@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Debug on runner (When re-run with "Enable debug logging" checked)
         if: runner.debug
-        uses: mxschmitt/action-tmate@c0afd6f790e3a5564914980036ebf83216678101 # v3.23
+        uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24
         with:
           detached: true
       - name: Install virtualisation software
@@ -80,28 +80,19 @@ jobs:
         run: vagrant plugin install vagrant-qemu
       - name: Install Test Kitchen
         if: ${{ !startsWith(runner.name, 'self') }}
-        uses: actionshub/chef-install@998ca15464a2bafdc36d3970cffc0e32823b179d # 5.0.2
-        env:
-          # renovate: datasource=custom.omnitruck depName=chef-workstation
-          CHEF_WS_VERSION: 25.13.7
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
         with:
-          project: chef-workstation
-          version: ${{ env.CHEF_WS_VERSION }}
+          bundler-cache: true
+          ruby-version: '3.1'
       - name: Prepare Test Kitchen
-        env:
-          # renovate: datasource=rubygems depName=kitchen-salt
-          KITCHEN-SALT_VERSION: 0.7.2
         run: |
           if [[ "${{ inputs.build-type }}" == vbox* ]]; then
             echo TECHNEG_VAGRANT_PROVIDER=virtualbox >> $GITHUB_ENV
           fi
-          if [[ "${{ runner.name }}" != self* ]]; then
-            chef gem install kitchen-salt --version ${{ env.KITCHEN-SALT_VERSION }}
-          fi
       - name: Run Test Kitchen
         env:
           TECHNEG_VAGRANT_BOX: ${{ steps.packer.outputs.vagrant-box }}
-        run: kitchen test
+        run: ${{ runner.environment != 'self-hosted' && 'bundle exec' || '' }} kitchen test
       - name: Upload to Vagrant Cloud (On GitHub default branch only)
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         env:
